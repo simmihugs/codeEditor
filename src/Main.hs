@@ -15,7 +15,7 @@ import Monomer
 import qualified Monomer.Lens as L
 
 
-import qualified MyTextArea3 as My3
+import qualified MyTextArea as My
 import qualified MyCombinators as Cmb
 
 
@@ -76,7 +76,7 @@ buildUI wenv model = widgetTree where
                                 `styleBasic` [width 150]
                                , filler]
                       , spacer
-                      , My3.textArea_ haskellText
+                      , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers) : [Cmb.currentLineColor (rgbHex "#358770") | model ^. currentLine] ++ [Cmb.syntax (syntaxTree,syntaxMap) | model ^. syntax])
                         `styleBasic` [bgColor $ rgbHex "#204278"
                                      , textColor $ rgbHex "#ffffff"
