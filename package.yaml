@@ -1,0 +1,33 @@
+name:                MyTextarea
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/simmihugs/mytextarea#readme
+license:             BSD3
+author:              Simon Graetz
+maintainer:          simon.graetz@gmx.de
+copyright:           2022 Simon Graetz
+#category:
+extra-source-files:
+- README.md
+
+default-extensions:
+- OverloadedStrings
+
+dependencies:
+  - base >= 4.7 && < 5
+  - data-default
+  - lens
+  - monomer
+  - text
+  - text-show
+  - containers
+  - ghc-syntax-highlighter
+
+executables:
+  app:
+    source-dirs:      src
+    main:             Main.hs
+    ghc-options:
+    - -fwarn-incomplete-patterns
+    - -threaded
