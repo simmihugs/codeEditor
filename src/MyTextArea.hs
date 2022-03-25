@@ -16,7 +16,7 @@ Input field for multiline 'Text'.
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE StrictData #-}
 
-module MyTextArea3 (
+module MyTextArea (
   -- * Configuration
   TextAreaCfg,
   -- * Constructors
@@ -84,7 +84,8 @@ data TextAreaCfg s e = TextAreaCfg {
   _tacOnChangeReq :: [Text -> WidgetRequest s e],
   _tacShowLineNumbers :: Maybe Bool,
   _tacSyntax :: Maybe (Maybe [(Token, Loc)], [(Token,Color)]),
-  _tacCurrentLineColor :: Maybe Color
+  _tacCurrentLineColor :: Maybe Color,
+  _tacWheelRate :: Maybe Rational
 }
 
 instance Default (TextAreaCfg s e) where
@@ -100,7 +101,8 @@ instance Default (TextAreaCfg s e) where
     _tacOnChangeReq = [],
     _tacShowLineNumbers = Nothing,
     _tacSyntax = Nothing,
-    _tacCurrentLineColor = Nothing
+    _tacCurrentLineColor = Nothing,
+    _tacWheelRate = Nothing
   }
 
 instance Semigroup (TextAreaCfg s e) where
@@ -116,7 +118,13 @@ instance Semigroup (TextAreaCfg s e) where
     _tacOnChangeReq = _tacOnChangeReq t1 <> _tacOnChangeReq t2,
     _tacShowLineNumbers = _tacShowLineNumbers t2 <|> _tacShowLineNumbers t1,
     _tacSyntax = _tacSyntax t2 <|> _tacSyntax t1,
-    _tacCurrentLineColor = _tacCurrentLineColor t2 <|> _tacCurrentLineColor t1
+    _tacCurrentLineColor = _tacCurrentLineColor t2 <|> _tacCurrentLineColor t1,
+    _tacWheelRate = _tacWheelRate t2 <|> _tacWheelRate t1
+  }
+
+instance CmbWheelRate (TextAreaCfg s e) Rational where
+  wheelRate rate = def {
+    _tacWheelRate = Just rate
   }
 
 instance Monoid (TextAreaCfg s e) where
@@ -261,7 +269,10 @@ textAreaD_ wdata configs = scrollNode where
   widget = makeTextArea wdata config def
   node = defaultWidgetNode "textArea" widget
     & L.info . L.focusable .~ True
-  scrollCfg = [scrollStyle L.textAreaStyle, scrollFwdStyle scrollFwdDefault]
+  scrollCfg =
+    wheelRate (fromMaybe 50 (_tacWheelRate config))
+    : [ scrollStyle L.textAreaStyle
+      , scrollFwdStyle scrollFwdDefault]
   scrollNode = scroll_ scrollCfg node
 
 makeTextArea

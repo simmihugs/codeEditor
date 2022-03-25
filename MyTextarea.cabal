@@ -21,7 +21,7 @@ executable app
   other-modules:
       MyCombinators
       MyDrawing
-      MyTextArea3
+      MyTextArea
       Paths_MyTextarea
   hs-source-dirs:
       src
