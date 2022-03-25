@@ -695,9 +695,16 @@ makeTextArea !wdata !config !state = widget where
       | rectInRect caretRect (wenv ^. L.viewport) || isNothing scWid = []
       | otherwise = [SendMessage (fromJust scWid) scrollMsg]
 
+  numToDigits number = numToDigits' number 0
+    where
+      numToDigits' 0 acc = acc
+      numToDigits' number acc = numToDigits' (number `div` 10) (succ acc)
   lineNumberWidth = if fromMaybe False (_tacShowLineNumbers config)
-                    then 50
+                    then do let digits' = numToDigits $ Seq.length $ _tasTextLines state
+                            50 + (if digits' > 2 then 10*(digits'-3) else 0) 
                     else 0
+                         
+                         
   getSizeReq wenv node = sizeReq where
     Size w h = getTextLinesSize textLines
     {- getTextLines does not return the vertical spacing for the last line, but
@@ -757,10 +764,31 @@ makeTextArea !wdata !config !state = widget where
           let space  = unFontSpace $ _tlFontSpaceV line
           let height = _rH $ _tlRect line
           height + space
+    -- let textLine t y = do
+    --       let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
+    --       let rect' = wvp & L.x +~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
+    --       --let rect' = Rect (wenv ^. L.viewport ^. L.x + 5) y 20 20
+    --       def
+    --         & L.text .~ t
+    --         & L.rect .~ rect'
+    --         & L.fontSize .~ fontSize
+    --         & L.font .~ font
+    -- let renderLineNumber = renderIndexLine . createIndexLine
+    --       where
+    --         lineStyle index =
+    --           otherStyle $ if index==succ (snd $ _tasCursorPos state)
+    --                        then rgbHex "#ff2200"
+    --                        else rgbHex "#000000"
+    --         renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
+    --         createIndexLine x            = (x,textLine (T.pack $ show x) (35 + fromIntegral x * rH'))
+    -- when (fromMaybe False (_tacShowLineNumbers config)) $ do
+    --     drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
+    --     drawInScissor renderer True lineNumbersRect $ do
+    --       mapM_ renderLineNumber [1..length textLines]
+    let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
     let textLine t y = do
-          let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
-          let rect' = wvp & L.x +~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
-          --let rect' = Rect (wenv ^. L.viewport ^. L.x + 5) y 20 20
+          -- Do not use viewport's x here; just set the desired padding values
+          let rect' = def & L.x .~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
           def
             & L.text .~ t
             & L.rect .~ rect'
@@ -777,7 +805,9 @@ makeTextArea !wdata !config !state = widget where
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
         drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
         drawInScissor renderer True lineNumbersRect $ do
-          mapM_ renderLineNumber [1..length textLines]
+          -- Apply x offset here
+          drawInTranslation renderer (Point (wvp ^. L.x) 0) $
+            mapM_ renderLineNumber [1..length textLines]
     where
       style = currentStyle wenv node
       contentArea = getContentArea node style

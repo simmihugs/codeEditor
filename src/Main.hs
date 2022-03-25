@@ -23,6 +23,7 @@ import Monomer
       CmbTextSize(textSize),
       CmbWidth(width),
       CmbWheelRate(wheelRate),
+      CmbAcceptTab(acceptTab),
       appFontDef,
       appInitEvent,
       appTheme,
@@ -35,7 +36,6 @@ import Monomer
       button,
       filler,
       spacer,
-      acceptTab,
       AppEventResponse,
       EventResponse(Model) )
 
@@ -52,7 +52,7 @@ import GHC.SyntaxHighlighter
       Token(OtherTok, KeywordTok, PragmaTok, SymbolTok, VariableTok,
             ConstructorTok, OperatorTok, CharTok, StringTok, IntegerTok,
             RationalTok, CommentTok, SpaceTok) )
-import Monomer (CmbHlColor(hlColor))
+
 
 
 data AppModel = AppModel {
