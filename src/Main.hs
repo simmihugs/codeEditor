@@ -77,7 +77,10 @@ buildUI wenv model = widgetTree where
                                , filler]
                       , spacer
                       , My.textArea_ haskellText
-                        (Cmb.showLineNumbers_ (model ^. lineNumbers) : [Cmb.currentLineColor (rgbHex "#358770") | model ^. currentLine] ++ [Cmb.syntax (syntaxTree,syntaxMap) | model ^. syntax])
+                        (Cmb.showLineNumbers_ (model ^. lineNumbers)
+                          : [wheelRate 50]
+                          ++ [Cmb.currentLineColor (rgbHex "#358770") | model ^. currentLine]
+                          ++ [Cmb.syntax (syntaxTree,syntaxMap) | model ^. syntax])
                         `styleBasic` [bgColor $ rgbHex "#000000"
                                      , textColor $ rgbHex "#ffffff"
                                      , sndColor $ rgbHex "#358770"
