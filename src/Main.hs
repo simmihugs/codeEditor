@@ -10,6 +10,34 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.IO ( readFile )
 import Monomer
+    ( WidgetEnv,
+      WidgetNode,
+      rgbHex,
+      CmbStyleBasic(styleBasic),
+      CmbBgColor(bgColor),
+      CmbHlColor(hlColor),
+      CmbPadding(padding),
+      CmbSndColor(sndColor),
+      CmbTextColor(textColor),
+      CmbTextFont(textFont),
+      CmbTextSize(textSize),
+      CmbWidth(width),
+      CmbWheelRate(wheelRate),
+      appFontDef,
+      appInitEvent,
+      appTheme,
+      appWindowIcon,
+      appWindowTitle,
+      darkTheme,
+      startApp,
+      hstack,
+      vstack,
+      button,
+      filler,
+      spacer,
+      acceptTab,
+      AppEventResponse,
+      EventResponse(Model) )
 
 
 import qualified Monomer.Lens as L
@@ -78,7 +106,7 @@ buildUI wenv model = widgetTree where
                       , spacer
                       , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers)
-                          : [wheelRate 50]
+                          : [wheelRate 50, acceptTab]
                           ++ [Cmb.currentLineColor (rgbHex "#358770") | model ^. currentLine]
                           ++ [Cmb.syntax (syntaxTree,syntaxMap) | model ^. syntax])
                         `styleBasic` [bgColor $ rgbHex "#000000"
