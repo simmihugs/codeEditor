@@ -1,5 +1,6 @@
 :set -fno-ghci-sandbox
 :set -ferror-spans
 :set -fdiagnostics-color=always
+:set -fno-warn-deprecations
 :set prompt "\x03BB: "
 :set prompt-cont  "   | "
