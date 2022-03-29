@@ -97,7 +97,7 @@ buildUI wenv model = widgetTree where
   widgetTree = vstack [ hstack [button (if model ^. syntax then "Syntax off" else "Syntax") AppShowSyntax
                                 `styleBasic` [width 150]
                                , spacer
-                               , button (if model ^. syntax then "LineNumbers off" else "LineNumbers") AppLineNumbers
+                               , button (if model ^. lineNumbers then "LineNumbers off" else "LineNumbers") AppLineNumbers
                                 `styleBasic` [width 150]
                                , spacer
                                , button (if model ^. currentLine then "Highlight off" else "Highlight") AppCurrentLine

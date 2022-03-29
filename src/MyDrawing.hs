@@ -95,7 +95,8 @@ drawTextSyntaxed renderer style syntaxTree syntaxMap textLines = do
             | startLine==endLine = T.drop (pred startColumn) $ T.take (pred endColumn) _tlText
             | otherwise          = T.drop (pred startColumn) _tlText
       
-      let txtOrigin = Point (tx+x2) by
+      --let txtOrigin = Point (tx+x2) by
+      let txtOrigin = Point (fromIntegral (floor (tx + x2))) by
       
       setFillColor renderer (fromMaybe (rgbHex "#ffffff") (lookup token syntaxMap))
       renderText renderer txtOrigin _tlFont _tlFontSize _tlFontSpaceH textPart

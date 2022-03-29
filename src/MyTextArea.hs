@@ -54,7 +54,7 @@ import GHC.SyntaxHighlighter
 defCaretW :: Double
 defCaretW = 2
 
-defCaretMs :: Int
+defCaretMs :: Timestamp
 defCaretMs = 500
 
 {-|
@@ -74,7 +74,7 @@ Configuration options for textArea:
 -}
 data TextAreaCfg s e = TextAreaCfg {
   _tacCaretWidth :: Maybe Double,
-  _tacCaretMs :: Maybe Int,
+  _tacCaretMs :: Maybe Timestamp,
   _tacMaxLength :: Maybe Int,
   _tacMaxLines :: Maybe Int,
   _tacAcceptTab :: Maybe Bool,
@@ -135,7 +135,7 @@ instance CmbCaretWidth (TextAreaCfg s e) Double where
     _tacCaretWidth = Just w
   }
 
-instance CmbCaretMs (TextAreaCfg s e) Int where
+instance CmbCaretMs (TextAreaCfg s e) Timestamp where
   caretMs ms = def {
     _tacCaretMs = Just ms
   }
@@ -220,7 +220,7 @@ data TextAreaState = TextAreaState {
   _tasTextLines :: Seq TextLine,
   _tasHistory :: Seq HistoryStep,
   _tasHistoryIdx :: Int,
-  _tasFocusStart :: Int
+  _tasFocusStart :: Timestamp
 } deriving (Eq, Show, Generic)
 
 instance Default TextAreaState where
@@ -684,7 +684,10 @@ makeTextArea !wdata !config !state = widget where
   generateScrollReq wenv node newState = scrollReq where
     style = currentStyle wenv node
     scPath = parentPath node
-    scWid = findWidgetIdFromPath wenv scPath
+
+    --scWid = findWidgetIdFromPath wenv scPath
+    scWid = widgetIdFromPath wenv scPath
+    
     contentArea = getContentArea node style
     offset = Point (contentArea ^. L.x) (contentArea ^. L.y)
     caretRect = getCaretRect config newState True
