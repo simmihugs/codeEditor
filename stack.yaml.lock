@@ -5,10 +5,10 @@
 
 packages:
 - completed:
-    hackage: nanovg-0.8.0.0@sha256:0183b4295ccc2dfb94a7eca977fb45759e1480652578936aa7b71bb4b9626480,4742
+    hackage: nanovg-0.8.0.0@sha256:aa8d2864d17daae3ba8c834ea523d805b8a68414e9ba1df00b102b89348ec954,4914
     pantry-tree:
       size: 2558
-      sha256: 0acd44b6f4f50d20bb162084895e052d9437e4de18f988c06e5acf9f85497e1c
+      sha256: f179e5e90a4f58c23bc989979721b1246836e7db0213fb8d7aa5dc3b7d1de791
   original:
     hackage: nanovg-0.8.0.0
 - completed:
@@ -17,11 +17,11 @@ packages:
     git: https://github.com/fjvallarino/monomer
     pantry-tree:
       size: 17322
-      sha256: 0aa1911f255e01746b534e80ee2b4eee2d3b5617cdc0a62aef499e797730c3db
-    commit: 46f22c2d621e644a573d10cfaaae10ebcec5ed0d
+      sha256: 3910f6441451cfcf59bb6444128a90b3af02bdb1d58f503e81ddd19c720c2ace
+    commit: a7f9fd904f5a9094733d5f209c79d8acef029916
   original:
     git: https://github.com/fjvallarino/monomer
-    commit: 46f22c2d621e644a573d10cfaaae10ebcec5ed0d
+    commit: a7f9fd904f5a9094733d5f209c79d8acef029916
 snapshots:
 - completed:
     size: 590102

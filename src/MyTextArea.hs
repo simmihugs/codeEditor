@@ -685,7 +685,6 @@ makeTextArea !wdata !config !state = widget where
     style = currentStyle wenv node
     scPath = parentPath node
 
-    --scWid = findWidgetIdFromPath wenv scPath
     scWid = widgetIdFromPath wenv scPath
     
     contentArea = getContentArea node style
