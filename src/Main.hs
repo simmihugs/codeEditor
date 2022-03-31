@@ -104,6 +104,8 @@ buildUI wenv model = widgetTree where
                                 `styleBasic` [width 150]
                                , filler]
                       , spacer
+                      , hstack [button "This is a test button" AppInit, button "This is another test button" AppInit, button "This is yet another test button" AppInit]
+                      , spacer
                       , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers)
                           : [wheelRate 50, acceptTab]
