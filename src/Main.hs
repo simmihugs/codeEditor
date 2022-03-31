@@ -36,8 +36,9 @@ import Monomer
       button,
       filler,
       spacer,
+      textField,
       AppEventResponse,
-      EventResponse(Model) )
+      EventResponse(Model), nodeVisible )
 
 
 import qualified Monomer.Lens as L
@@ -57,6 +58,7 @@ import GHC.SyntaxHighlighter
 
 data AppModel = AppModel {
   _sampleText    :: Text,
+  _showButtons   :: Bool,
   _haskellText   :: Text,
   _syntax        :: Bool,
   _lineNumbers   :: Bool,
@@ -68,6 +70,7 @@ data AppEvent = AppInit
               | AppShowSyntax
               | AppLineNumbers
               | AppCurrentLine
+              | AppShowButtons
               deriving (Eq, Show)
 
 makeLenses 'AppModel
@@ -102,9 +105,12 @@ buildUI wenv model = widgetTree where
                                , spacer
                                , button (if model ^. currentLine then "Highlight off" else "Highlight") AppCurrentLine
                                 `styleBasic` [width 150]
+                               , spacer
+                               , button "show nextLine" AppShowButtons
                                , filler]
-                      , spacer
-                      , hstack [button "This is a test button" AppInit, button "This is another test button" AppInit, button "This is yet another test button" AppInit]
+                      , vstack [spacer
+                               , textField sampleText
+                               ] `nodeVisible` model ^. showButtons
                       , spacer
                       , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers)
@@ -119,6 +125,7 @@ buildUI wenv model = widgetTree where
                                      , hlColor $ rgbHex "#5b388c"]
                       ] `styleBasic` [padding 10]
 
+
 handleEvent
   :: WidgetEnv AppModel AppEvent
   -> WidgetNode AppModel AppEvent
@@ -130,11 +137,22 @@ handleEvent wenv node model evt = case evt of
   AppShowSyntax  -> [Model $ model & syntax %~ not]
   AppLineNumbers -> [Model $ model & lineNumbers %~ not]
   AppCurrentLine -> [Model $ model & currentLine %~ not]
+  AppShowButtons  -> [Model $ model & showButtons %~ not]
+
+
 
 main :: IO ()
 main = do
   haskellText' <- readFile "./src/Main.hs"
-  let model = AppModel "abcdefghijklmnopqrstuvwxyz\nabcdefghijklmnopqrstuvwxyz" haskellText' True True True 15
+  let model = AppModel {
+        _sampleText    = "This is an example text.",
+        _haskellText   = haskellText',
+        _showButtons   = True,
+        _syntax        = True,
+        _lineNumbers   = True,
+        _currentLine   = True,
+        _modelTextSize = 20
+        }
   startApp model handleEvent buildUI config
   where
     config = [

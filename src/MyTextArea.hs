@@ -766,27 +766,6 @@ makeTextArea !wdata !config !state = widget where
           let space  = unFontSpace $ _tlFontSpaceV line
           let height = _rH $ _tlRect line
           height + space
-    -- let textLine t y = do
-    --       let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
-    --       let rect' = wvp & L.x +~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
-    --       --let rect' = Rect (wenv ^. L.viewport ^. L.x + 5) y 20 20
-    --       def
-    --         & L.text .~ t
-    --         & L.rect .~ rect'
-    --         & L.fontSize .~ fontSize
-    --         & L.font .~ font
-    -- let renderLineNumber = renderIndexLine . createIndexLine
-    --       where
-    --         lineStyle index =
-    --           otherStyle $ if index==succ (snd $ _tasCursorPos state)
-    --                        then rgbHex "#ff2200"
-    --                        else rgbHex "#000000"
-    --         renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
-    --         createIndexLine x            = (x,textLine (T.pack $ show x) (35 + fromIntegral x * rH'))
-    -- when (fromMaybe False (_tacShowLineNumbers config)) $ do
-    --     drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
-    --     drawInScissor renderer True lineNumbersRect $ do
-    --       mapM_ renderLineNumber [1..length textLines]
     let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
     let textLine t y = do
           -- Do not use viewport's x here; just set the desired padding values
@@ -803,7 +782,10 @@ makeTextArea !wdata !config !state = widget where
                            then rgbHex "#ff2200"
                            else rgbHex "#000000"
             renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
-            createIndexLine x            = (x,textLine (T.pack $ show x) (35 + fromIntegral x * rH'))
+            createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
+              where
+                verticalPosition = contentArea ^. L.y - 30 + fromIntegral x * rH'
+        
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
         drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
         drawInScissor renderer True lineNumbersRect $ do
