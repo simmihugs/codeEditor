@@ -1,13 +1,10 @@
-name:                MyTextarea
+name:                monomer-textArea
 version:             0.1.0.0
-#synopsis:
-#description:
 homepage:            https://github.com/simmihugs/mytextarea#readme
 license:             BSD3
 author:              Simon Graetz
 maintainer:          simon.graetz@gmx.de
 copyright:           2022 Simon Graetz
-#category:
 extra-source-files:
 - README.md
 
