@@ -20,6 +20,21 @@ class CmbShowLineNumbers t where
   showLineNumbers_ :: Bool -> t
 
 
+-- | Linenumber background color.
+class CmbLineNumberBackgroundColor t where
+  lineNumberBackgroundColor :: Color -> t
+
+
+-- | Linenumber number color.
+class CmbLinenumberNumberColor t where
+  linenumberNumberColor :: Color -> t
+
+
+-- | Linenumber number color.
+class CmbLinenumberNumberHighlightColor t where
+  linenumberNumberHighlightColor :: Color -> t
+
+
 -- | Define syntax.
 class CmbSyntax t where
   syntax :: (Maybe [(Token, Loc)], [(Token,Color)]) -> t

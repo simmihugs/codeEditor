@@ -85,7 +85,10 @@ data TextAreaCfg s e = TextAreaCfg {
   _tacShowLineNumbers :: Maybe Bool,
   _tacSyntax :: Maybe (Maybe [(Token, Loc)], [(Token,Color)]),
   _tacCurrentLineColor :: Maybe Color,
-  _tacWheelRate :: Maybe Rational
+  _tacWheelRate :: Maybe Rational,
+  _tacLineNumberBackgroundColor :: Maybe Color,
+  _tacLinenumberNumberColor :: Maybe Color,
+  _tacLinenumberNumberHighlightColor :: Maybe Color
 }
 
 instance Default (TextAreaCfg s e) where
@@ -102,7 +105,10 @@ instance Default (TextAreaCfg s e) where
     _tacShowLineNumbers = Nothing,
     _tacSyntax = Nothing,
     _tacCurrentLineColor = Nothing,
-    _tacWheelRate = Nothing
+    _tacWheelRate = Nothing,
+    _tacLineNumberBackgroundColor = Nothing,
+    _tacLinenumberNumberColor = Nothing,
+    _tacLinenumberNumberHighlightColor = Nothing
   }
 
 instance Semigroup (TextAreaCfg s e) where
@@ -119,8 +125,12 @@ instance Semigroup (TextAreaCfg s e) where
     _tacShowLineNumbers = _tacShowLineNumbers t2 <|> _tacShowLineNumbers t1,
     _tacSyntax = _tacSyntax t2 <|> _tacSyntax t1,
     _tacCurrentLineColor = _tacCurrentLineColor t2 <|> _tacCurrentLineColor t1,
-    _tacWheelRate = _tacWheelRate t2 <|> _tacWheelRate t1
+    _tacWheelRate = _tacWheelRate t2 <|> _tacWheelRate t1,
+    _tacLineNumberBackgroundColor = _tacLineNumberBackgroundColor t2 <|> _tacLineNumberBackgroundColor t1,
+    _tacLinenumberNumberColor = _tacLinenumberNumberColor t2 <|> _tacLinenumberNumberColor t1,
+    _tacLinenumberNumberHighlightColor = _tacLinenumberNumberColor t2 <|> _tacLinenumberNumberColor t1
   }
+
 
 instance CmbWheelRate (TextAreaCfg s e) Rational where
   wheelRate rate = def {
@@ -169,6 +179,25 @@ instance CmbCurrentLineColor (TextAreaCfg s e) where
   currentLineColor color = def {
     _tacCurrentLineColor = Just color
   }
+
+
+instance CmbLineNumberBackgroundColor (TextAreaCfg s e) where
+  lineNumberBackgroundColor color = def {
+    _tacLineNumberBackgroundColor = Just color
+    }
+
+
+instance CmbLinenumberNumberColor (TextAreaCfg s e) where
+  linenumberNumberColor color = def {
+    _tacLinenumberNumberColor = Just color
+    }
+
+
+instance CmbLinenumberNumberHighlightColor (TextAreaCfg s e) where
+  linenumberNumberHighlightColor color = def {
+    _tacLinenumberNumberHighlightColor = Just color
+    }
+
 
 instance CmbSelectOnFocus (TextAreaCfg s e) where
   selectOnFocus_ sel = def {
@@ -780,15 +809,18 @@ makeTextArea !wdata !config !state = widget where
           where
             lineStyle index =
               otherStyle $ if index==succ (snd $ _tasCursorPos state)
-                           then rgbHex "#ff2200"
-                           else rgbHex "#000000"
+                           then fromMaybe (rgbHex "#ff2200") (_tacLinenumberNumberHighlightColor config)
+                           else fromMaybe (rgbHex "#000000") (_tacLinenumberNumberColor config)
             renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
             createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
               where
                 verticalPosition = contentArea ^. L.y - 2 - 25 + fromIntegral x * rH'
+    
+
         
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
-        drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
+        drawRect renderer lineNumbersRect
+          (Just (fromMaybe (rgbHex "#11ff00") (_tacLineNumberBackgroundColor config))) Nothing
         drawInScissor renderer True lineNumbersRect $ do
           -- Apply x offset here
           drawInTranslation renderer (Point (wvp ^. L.x) 0) $
