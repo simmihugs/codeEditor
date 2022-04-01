@@ -785,7 +785,7 @@ makeTextArea !wdata !config !state = widget where
             renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
             createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
               where
-                verticalPosition = contentArea ^. L.y - 30 + fromIntegral x * rH'
+                verticalPosition = contentArea ^. L.y - 25 + fromIntegral x * rH'
         
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
         drawRect renderer lineNumbersRect (Just (fromMaybe (rgbHex "#ff2200") (style ^. L.sndColor))) Nothing
