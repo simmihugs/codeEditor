@@ -24,6 +24,12 @@ dependencies:
   - containers
   - ghc-syntax-highlighter
 
+library:
+  source-dirs: src
+  ghc-options:
+  - -fwarn-incomplete-patterns
+  - -threaded
+
 executables:
   app:
     source-dirs:      src

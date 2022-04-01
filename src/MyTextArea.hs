@@ -697,6 +697,8 @@ makeTextArea !wdata !config !state = widget where
       | rectInRect caretRect (wenv ^. L.viewport) || isNothing scWid = []
       | otherwise = [SendMessage (fromJust scWid) scrollMsg]
 
+  -- | Calculate the required width of Linenumber area
+  -- | based on number of textlines.
   numToDigits number = numToDigits' number 0
     where
       numToDigits' 0 acc = acc
@@ -705,7 +707,6 @@ makeTextArea !wdata !config !state = widget where
                     then do let digits' = numToDigits $ Seq.length $ _tasTextLines state
                             50 + (if digits' > 2 then 10*(digits'-3) else 0) 
                     else 0
-                         
                          
   getSizeReq wenv node = sizeReq where
     Size w h = getTextLinesSize textLines
