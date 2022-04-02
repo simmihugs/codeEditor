@@ -18,6 +18,7 @@ extra-source-files:
 
 library
   exposed-modules:
+      CLexer
       MyCombinators
       MyDrawing
       MyTextArea

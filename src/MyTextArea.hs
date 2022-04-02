@@ -825,8 +825,8 @@ makeTextArea !wdata !config !state = widget where
           -- Modified. Also apply y offset here. It uses the node's viewport
           -- (without subtracting padding, as contentArea does)
           --drawInTranslation renderer (Point (wvp ^. L.x) 0) $
+          drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
           --drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
-          drawInTranslation renderer (Point (wvp ^. L.x) (node ^. L.info . L.viewport . L.y)) $
             mapM_ renderLineNumber [1..length textLines]
     where
       style = currentStyle wenv node
