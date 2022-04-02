@@ -145,7 +145,7 @@ handleEvent wenv node model evt = case evt of
 
 main :: IO ()
 main = do
-  haskellText' <- readFile "./src/Main.hs"
+  haskellText' <- readFile "./app/Main.hs"
   let model = AppModel {
         _sampleText    = "This is an example text.",
         _haskellText   = haskellText',

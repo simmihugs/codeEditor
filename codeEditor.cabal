@@ -18,7 +18,6 @@ extra-source-files:
 
 library
   exposed-modules:
-      Main
       MyCombinators
       MyDrawing
       MyTextArea
@@ -28,7 +27,6 @@ library
       src
   default-extensions:
       OverloadedStrings
-  ghc-options: -fwarn-incomplete-patterns
   build-depends:
       base >=4.7 && <5
     , containers
@@ -43,17 +41,15 @@ library
 executable app
   main-is: Main.hs
   other-modules:
-      MyCombinators
-      MyDrawing
-      MyTextArea
       Paths_codeEditor
   hs-source-dirs:
-      src
+      app
   default-extensions:
       OverloadedStrings
   ghc-options: -fwarn-incomplete-patterns -threaded
   build-depends:
       base >=4.7 && <5
+    , codeEditor
     , containers
     , data-default
     , ghc-syntax-highlighter

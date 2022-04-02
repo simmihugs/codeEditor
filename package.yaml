@@ -5,6 +5,7 @@ license:             BSD3
 author:              Simon Graetz
 maintainer:          simon.graetz@gmx.de
 copyright:           2022 Simon Graetz
+
 extra-source-files:
 - README.md
 
@@ -23,13 +24,13 @@ dependencies:
 
 library:
   source-dirs: src
-  ghc-options:
-  - -fwarn-incomplete-patterns
 
 executables:
   app:
-    source-dirs:      src
-    main:             Main.hs
+    main:          Main.hs
+    source-dirs:   app
     ghc-options:
     - -fwarn-incomplete-patterns
     - -threaded
+    dependencies:
+    - codeEditor
