@@ -115,6 +115,9 @@ buildUI wenv model = widgetTree where
                       , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers)
                           : [wheelRate 50, acceptTab]
+                          ++ [Cmb.lineNumberBackgroundColor $ rgbHex "#525252"]
+                          ++ [Cmb.lineNumberNumberColor $ rgbHex "#696969"]
+                          ++ [Cmb.lineNumberNumberHighlightColor $ rgbHex "#00f2ff"]
                           ++ [Cmb.currentLineColor (rgbHex "#358770") | model ^. currentLine]
                           ++ [Cmb.syntax (syntaxTree,syntaxMap) | model ^. syntax])
                         `styleBasic` [bgColor $ rgbHex "#000000"
@@ -137,8 +140,7 @@ handleEvent wenv node model evt = case evt of
   AppShowSyntax  -> [Model $ model & syntax %~ not]
   AppLineNumbers -> [Model $ model & lineNumbers %~ not]
   AppCurrentLine -> [Model $ model & currentLine %~ not]
-  AppShowButtons  -> [Model $ model & showButtons %~ not]
-
+  AppShowButtons -> [Model $ model & showButtons %~ not]
 
 
 main :: IO ()

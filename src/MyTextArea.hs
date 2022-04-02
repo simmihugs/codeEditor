@@ -87,8 +87,8 @@ data TextAreaCfg s e = TextAreaCfg {
   _tacCurrentLineColor :: Maybe Color,
   _tacWheelRate :: Maybe Rational,
   _tacLineNumberBackgroundColor :: Maybe Color,
-  _tacLinenumberNumberColor :: Maybe Color,
-  _tacLinenumberNumberHighlightColor :: Maybe Color
+  _tacLineNumberNumberColor :: Maybe Color,
+  _tacLineNumberNumberHighlightColor :: Maybe Color
 }
 
 instance Default (TextAreaCfg s e) where
@@ -107,8 +107,8 @@ instance Default (TextAreaCfg s e) where
     _tacCurrentLineColor = Nothing,
     _tacWheelRate = Nothing,
     _tacLineNumberBackgroundColor = Nothing,
-    _tacLinenumberNumberColor = Nothing,
-    _tacLinenumberNumberHighlightColor = Nothing
+    _tacLineNumberNumberColor = Nothing,
+    _tacLineNumberNumberHighlightColor = Nothing
   }
 
 instance Semigroup (TextAreaCfg s e) where
@@ -127,8 +127,8 @@ instance Semigroup (TextAreaCfg s e) where
     _tacCurrentLineColor = _tacCurrentLineColor t2 <|> _tacCurrentLineColor t1,
     _tacWheelRate = _tacWheelRate t2 <|> _tacWheelRate t1,
     _tacLineNumberBackgroundColor = _tacLineNumberBackgroundColor t2 <|> _tacLineNumberBackgroundColor t1,
-    _tacLinenumberNumberColor = _tacLinenumberNumberColor t2 <|> _tacLinenumberNumberColor t1,
-    _tacLinenumberNumberHighlightColor = _tacLinenumberNumberColor t2 <|> _tacLinenumberNumberColor t1
+    _tacLineNumberNumberColor = _tacLineNumberNumberColor t2 <|> _tacLineNumberNumberColor t1,
+    _tacLineNumberNumberHighlightColor = _tacLineNumberNumberHighlightColor t2 <|> _tacLineNumberNumberHighlightColor t1
   }
 
 
@@ -188,14 +188,14 @@ instance CmbLineNumberBackgroundColor (TextAreaCfg s e) where
 
 
 instance CmbLinenumberNumberColor (TextAreaCfg s e) where
-  linenumberNumberColor color = def {
-    _tacLinenumberNumberColor = Just color
+  lineNumberNumberColor color = def {
+    _tacLineNumberNumberColor = Just color
     }
 
 
 instance CmbLinenumberNumberHighlightColor (TextAreaCfg s e) where
-  linenumberNumberHighlightColor color = def {
-    _tacLinenumberNumberHighlightColor = Just color
+  lineNumberNumberHighlightColor color = def {
+    _tacLineNumberNumberHighlightColor = Just color
     }
 
 
@@ -809,21 +809,23 @@ makeTextArea !wdata !config !state = widget where
           where
             lineStyle index =
               otherStyle $ if index==succ (snd $ _tasCursorPos state)
-                           then fromMaybe (rgbHex "#ff2200") (_tacLinenumberNumberHighlightColor config)
-                           else fromMaybe (rgbHex "#000000") (_tacLinenumberNumberColor config)
+                           then fromMaybe (rgbHex "#ff2200") (_tacLineNumberNumberHighlightColor config)
+                           else fromMaybe (rgbHex "#000000") (_tacLineNumberNumberColor config)
             renderIndexLine (index,line) = drawTextLine renderer (lineStyle index) line
-            createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
-              where
-                verticalPosition = contentArea ^. L.y - 2 - 25 + fromIntegral x * rH'
-    
-
+            -- createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
+            --   where
+            --     verticalPosition = contentArea ^. L.y - 2 - 25 + fromIntegral x * rH'
+            createIndexLine x = (x,textLine (T.pack $ show x) (fromIntegral (x - 1) * rH'))    
         
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
         drawRect renderer lineNumbersRect
           (Just (fromMaybe (rgbHex "#11ff00") (_tacLineNumberBackgroundColor config))) Nothing
         drawInScissor renderer True lineNumbersRect $ do
           -- Apply x offset here
-          drawInTranslation renderer (Point (wvp ^. L.x) 0) $
+          -- Modified. Also apply y offset here. It uses the node's viewport
+          -- (without subtracting padding, as contentArea does)
+          --drawInTranslation renderer (Point (wvp ^. L.x) 0) $
+          drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
             mapM_ renderLineNumber [1..length textLines]
     where
       style = currentStyle wenv node

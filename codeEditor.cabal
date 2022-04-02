@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           monomer-textArea
+name:           codeEditor
 version:        0.1.0.0
-homepage:       https://github.com/simmihugs/monomer-textArea#readme
+homepage:       https://github.com/simmihugs/codeEditor#readme
 author:         Simon Graetz
 maintainer:     simon.graetz@gmx.de
 copyright:      2022 Simon Graetz
@@ -23,7 +23,7 @@ library
       MyDrawing
       MyTextArea
   other-modules:
-      Paths_monomer_textArea
+      Paths_codeEditor
   hs-source-dirs:
       src
   default-extensions:
@@ -46,7 +46,7 @@ executable app
       MyCombinators
       MyDrawing
       MyTextArea
-      Paths_monomer_textArea
+      Paths_codeEditor
   hs-source-dirs:
       src
   default-extensions:

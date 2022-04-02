@@ -1,6 +1,6 @@
-name:                monomer-textArea
+name:                codeEditor
 version:             0.1.0.0
-homepage:            https://github.com/simmihugs/monomer-textArea#readme
+homepage:            https://github.com/simmihugs/codeEditor#readme
 license:             BSD3
 author:              Simon Graetz
 maintainer:          simon.graetz@gmx.de

@@ -27,12 +27,12 @@ class CmbLineNumberBackgroundColor t where
 
 -- | Linenumber number color.
 class CmbLinenumberNumberColor t where
-  linenumberNumberColor :: Color -> t
+  lineNumberNumberColor :: Color -> t
 
 
 -- | Linenumber number color.
 class CmbLinenumberNumberHighlightColor t where
-  linenumberNumberHighlightColor :: Color -> t
+  lineNumberNumberHighlightColor :: Color -> t
 
 
 -- | Define syntax.
