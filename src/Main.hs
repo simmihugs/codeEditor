@@ -83,7 +83,7 @@ buildUI wenv model = widgetTree where
 
   syntaxTree = tokenizeHaskellLoc (model ^. haskellText)
 
-  syntaxMap = [(KeywordTok    ,rgbHex "#03dffc")
+  syntaxMap = [(KeywordTok     ,rgbHex "#03dffc")
               , (PragmaTok     ,rgbHex "#ffb638")
               , (SymbolTok     ,rgbHex "#e1e81c")
               , (VariableTok   ,rgbHex "#ffffff")
@@ -95,7 +95,7 @@ buildUI wenv model = widgetTree where
               , (RationalTok   ,rgbHex "#ffffff")
               , (CommentTok    ,rgbHex "#fc9003")
               , (SpaceTok      ,rgbHex "#ffffff")
-              , (OtherTok      ,rgbHex "#ff38e8")]
+              , (OtherTok      ,rgbHex "#000000")]
   
   widgetTree = vstack [ hstack [button (if model ^. syntax then "Syntax off" else "Syntax") AppShowSyntax
                                 `styleBasic` [width 150]
