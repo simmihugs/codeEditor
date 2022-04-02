@@ -153,7 +153,7 @@ main = do
         _syntax        = True,
         _lineNumbers   = True,
         _currentLine   = True,
-        _modelTextSize = 20
+        _modelTextSize = 15
         }
   startApp model handleEvent buildUI config
   where

@@ -54,7 +54,8 @@ import GHC.SyntaxHighlighter
 defCaretW :: Double
 defCaretW = 2
 
-defCaretMs :: Timestamp
+
+defCaretMs :: Millisecond
 defCaretMs = 500
 
 {-|
@@ -74,7 +75,7 @@ Configuration options for textArea:
 -}
 data TextAreaCfg s e = TextAreaCfg {
   _tacCaretWidth :: Maybe Double,
-  _tacCaretMs :: Maybe Timestamp,
+  _tacCaretMs :: Maybe Millisecond,
   _tacMaxLength :: Maybe Int,
   _tacMaxLines :: Maybe Int,
   _tacAcceptTab :: Maybe Bool,
@@ -145,7 +146,7 @@ instance CmbCaretWidth (TextAreaCfg s e) Double where
     _tacCaretWidth = Just w
   }
 
-instance CmbCaretMs (TextAreaCfg s e) Timestamp where
+instance CmbCaretMs (TextAreaCfg s e) Millisecond where
   caretMs ms = def {
     _tacCaretMs = Just ms
   }
@@ -249,7 +250,7 @@ data TextAreaState = TextAreaState {
   _tasTextLines :: Seq TextLine,
   _tasHistory :: Seq HistoryStep,
   _tasHistoryIdx :: Int,
-  _tasFocusStart :: Timestamp
+  _tasFocusStart :: Millisecond
 } deriving (Eq, Show, Generic)
 
 instance Default TextAreaState where
@@ -825,7 +826,7 @@ makeTextArea !wdata !config !state = widget where
           -- Modified. Also apply y offset here. It uses the node's viewport
           -- (without subtracting padding, as contentArea does)
           --drawInTranslation renderer (Point (wvp ^. L.x) 0) $
-          drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
+          drawInTranslation renderer (Point (wvp ^. L.x) (node ^. L.info . L.viewport . L.y)) $
           --drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
             mapM_ renderLineNumber [1..length textLines]
     where
