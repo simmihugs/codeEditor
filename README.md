@@ -9,4 +9,4 @@ Added following functionallities
 - highlight current line
 - selection above current line highlight
 
-![grafik](https://user-images.githubusercontent.com/51531595/159380594-6704e6d4-d29c-418e-b44f-f01e40df5bad.png)
+![codeEditor](https://user-images.githubusercontent.com/51531595/161401459-895ef2c3-8959-4c69-a79d-9a61e9f8a5bd.png)
