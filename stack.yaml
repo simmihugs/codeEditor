@@ -45,7 +45,7 @@ extra-deps:
 #- git: https://github.com/fjvallarino/monomer
 #  commit: a7f9fd904f5a9094733d5f209c79d8acef029916
 - git: https://github.com/fjvallarino/monomer
-  commit: b80e2ca0360b5d740c9e1e9e8a07e00457744f6b
+  commit: 418d6ddc697118fc727628e1c5b2f41114c53689
 
 # Override default flag values for local packages and extra-deps
 flags:
