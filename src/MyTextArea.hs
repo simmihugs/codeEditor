@@ -800,7 +800,6 @@ makeTextArea !wdata !config !state = widget where
     let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
     let textLine idx = do
           -- Do not use viewport's x here; just set the desired padding values
-          --let rect' = def & L.x .~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
           let rect2 = textLines ^?! ix (idx - 1) . L.rect
           def
             & L.text .~ T.pack (show idx)
@@ -828,7 +827,6 @@ makeTextArea !wdata !config !state = widget where
           -- Apply x offset here
           -- Modified. Also apply y offset here. It uses the node's viewport
           -- (without subtracting padding, as contentArea does)
-          -- drawInTranslation renderer (Point (wvp ^. L.x) 0) $
           drawInTranslation renderer (Point (wvp ^. L.x) (contentArea ^. L.y + descending)) $
           --drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
             mapM_ renderLineNumber [1..length textLines]
