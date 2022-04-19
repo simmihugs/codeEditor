@@ -798,12 +798,13 @@ makeTextArea !wdata !config !state = widget where
           let height = _rH $ _tlRect line
           height + space
     let wvp = fromMaybe (wenv ^. L.viewport) (removeOuterBounds style (wenv ^. L.viewport))
-    let textLine t y = do
+    let textLine idx = do
           -- Do not use viewport's x here; just set the desired padding values
-          let rect' = def & L.x .~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
+          --let rect' = def & L.x .~ 5 & L.y .~ y & L.w .~ 20 & L.h .~ 20
+          let rect2 = textLines ^?! ix (idx - 1) . L.rect
           def
-            & L.text .~ t
-            & L.rect .~ rect'
+            & L.text .~ T.pack (show idx)
+            & L.rect .~ rect2
             & L.fontSize .~ fontSize
             & L.font .~ font
     let renderLineNumber = renderIndexLine . createIndexLine
@@ -816,17 +817,19 @@ makeTextArea !wdata !config !state = widget where
             -- createIndexLine x            = (x,textLine (T.pack $ show x) verticalPosition)
             --   where
             --     verticalPosition = contentArea ^. L.y - 2 - 25 + fromIntegral x * rH'
-            createIndexLine x = (x,textLine (T.pack $ show x) (fromIntegral (x - 1) * rH'))    
+            createIndexLine x = (x, textLine x)
         
     when (fromMaybe False (_tacShowLineNumbers config)) $ do
+        let descending = _tasTextMetrics state ^. L.desc
+
         drawRect renderer lineNumbersRect
           (Just (fromMaybe (rgbHex "#11ff00") (_tacLineNumberBackgroundColor config))) Nothing
         drawInScissor renderer True lineNumbersRect $ do
           -- Apply x offset here
           -- Modified. Also apply y offset here. It uses the node's viewport
           -- (without subtracting padding, as contentArea does)
-          --drawInTranslation renderer (Point (wvp ^. L.x) 0) $
-          drawInTranslation renderer (Point (wvp ^. L.x) (node ^. L.info . L.viewport . L.y)) $
+          -- drawInTranslation renderer (Point (wvp ^. L.x) 0) $
+          drawInTranslation renderer (Point (wvp ^. L.x) (contentArea ^. L.y + descending)) $
           --drawInTranslation renderer (Point (wvp ^. L.x) (3 + node ^. L.info . L.viewport . L.y)) $
             mapM_ renderLineNumber [1..length textLines]
     where
@@ -1074,7 +1077,7 @@ findClosestGlyphPos config state point = (newPos, lineIdx) where
 
   glyphs
     | Seq.null lineGlyphs = Seq.empty
-    | otherwise = lineGlyphs |> GlyphPos ' ' textLen 0 0 0 0 0
+    | otherwise = lineGlyphs |> GlyphPos ' ' 0 textLen 0 0 0 0 0
   glyphStart i g = (i, abs (_glpXMin g - x))
 
   pairs = Seq.mapWithIndex glyphStart glyphs
