@@ -88,7 +88,7 @@ drawTextSyntaxed renderer style syntaxTree syntaxMap textLines = do
       let oy = ty
       let hy = by - asc * 0.35
 
-      let x2 = maybe 50 _glpXMin (S.lookup (pred startColumn) _tlGlyphs)
+      let x2 = maybe 50 _glpX (S.lookup (pred startColumn) _tlGlyphs)
 
       let text = _tlText
       let textPart
