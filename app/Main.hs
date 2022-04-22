@@ -4,7 +4,7 @@
 module Main where
 
 import Prelude hiding ( readFile )
-import Control.Lens ( (&), (^.), (%~), makeLenses )
+import Control.Lens ( (&), (^.), (.~), (%~), makeLenses )
 import Data.Maybe ()
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -35,7 +35,9 @@ import Monomer
       vstack,
       button,
       filler,
+      keystroke,
       spacer,
+      label,
       textField,
       AppEventResponse,
       EventResponse(Model), nodeVisible )
@@ -71,6 +73,7 @@ data AppEvent = AppInit
               | AppLineNumbers
               | AppCurrentLine
               | AppShowButtons
+              | UpdateTextSize
               deriving (Eq, Show)
 
 makeLenses 'AppModel
@@ -105,12 +108,12 @@ buildUI wenv model = widgetTree where
                                , spacer
                                , button (if model ^. currentLine then "Highlight off" else "Highlight") AppCurrentLine
                                 `styleBasic` [width 150]
-                               , spacer
-                               , button "show nextLine" AppShowButtons
                                , filler]
-                      , vstack [spacer
-                               , textField sampleText
-                               ] `nodeVisible` model ^. showButtons
+                      , hstack [ label "textSize"
+                               , spacer
+                               , keystroke [("Enter",UpdateTextSize)] (textField sampleText)
+                               , filler
+                               ] 
                       , spacer
                       , My.textArea_ haskellText
                         (Cmb.showLineNumbers_ (model ^. lineNumbers)
@@ -141,19 +144,22 @@ handleEvent wenv node model evt = case evt of
   AppLineNumbers -> [Model $ model & lineNumbers %~ not]
   AppCurrentLine -> [Model $ model & currentLine %~ not]
   AppShowButtons -> [Model $ model & showButtons %~ not]
+  UpdateTextSize -> do
+                 let newTextSize = read $ T.unpack $ model ^. sampleText
+                 [Model $ model & modelTextSize .~ newTextSize]
 
 
 main :: IO ()
 main = do
   haskellText' <- readFile "./app/Main.hs"
   let model = AppModel {
-        _sampleText    = "This is an example text.",
+        _sampleText    = "30",
         _haskellText   = haskellText',
         _showButtons   = True,
         _syntax        = True,
         _lineNumbers   = True,
         _currentLine   = True,
-        _modelTextSize = 15
+        _modelTextSize = 30
         }
   startApp model handleEvent buildUI config
   where
